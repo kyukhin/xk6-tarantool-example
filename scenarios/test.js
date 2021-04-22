@@ -1,28 +1,30 @@
 import datagen from "k6/x/datagen";
 import tarantool from "k6/x/tarantool";
 
-const conn = tarantool.connect("172.19.0.2:3301");
+const conn1 = tarantool.connect("172.19.0.2:3301");
+const conn2 = tarantool.connect("172.19.0.3:3301");
 
 export let options = {
   scenarios: {
     constant_request_rate: {
       executor: "constant-arrival-rate",
-      rate: 1000000,
+      rate: 10000,
       timeUnit: "1s",
-      duration: "1m",
-      preAllocatedVUs: 500,
-      maxVUs: 1000,
+      duration: "5m",
+      preAllocatedVUs: 100,
+      maxVUs: 100,
     },
   },
 };
 
 export const setup = () => {
-  console.log("Run data generation");
+  console.log("Run data generation in the background");
   datagen.generateData();
 };
 
 export default () => {
-  tarantool.call(conn, "api_car_add", [datagen.getData()]);
+  tarantool.call(conn1, "api_car_add", [datagen.getData()]);
+  tarantool.call(conn2, "api_car_add", [datagen.getData()]);
 };
 
 export const teardown = () => {

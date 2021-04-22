@@ -1,4 +1,0 @@
-metrics:
-  export:
-    - path: '/metrics'
-      format: 'prometheus'

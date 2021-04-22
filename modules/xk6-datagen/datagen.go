@@ -1,9 +1,6 @@
 package datagen
 
 import (
-	"math/rand"
-	"time"
-
 	"github.com/dchest/uniuri"
 	"github.com/loadimpact/k6/js/modules"
 )
@@ -30,7 +27,6 @@ func (Datagen) GenerateData() {
 }
 
 func generateData() map[string]interface{} {
-	rand.Seed(time.Now().UnixNano())
 	data := map[string]interface{}{
 		"car_id": uniuri.NewLen(5),
 		"model":  uniuri.NewLen(5),
