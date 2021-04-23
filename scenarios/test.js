@@ -6,13 +6,23 @@ const conn2 = tarantool.connect("172.19.0.3:3301");
 
 export let options = {
   scenarios: {
-    constant_request_rate: {
+    conn1test: {
       executor: "constant-arrival-rate",
       rate: 10000,
       timeUnit: "1s",
       duration: "5m",
-      preAllocatedVUs: 100,
-      maxVUs: 100,
+      preAllocatedVUs: 4,
+      maxVUs: 4,
+      exec: "conn1test",
+    },
+    conn2test: {
+      executor: "constant-arrival-rate",
+      rate: 10000,
+      timeUnit: "1s",
+      duration: "5m",
+      preAllocatedVUs: 4,
+      maxVUs: 4,
+      exec: "conn2test",
     },
   },
 };
@@ -22,8 +32,11 @@ export const setup = () => {
   datagen.generateData();
 };
 
-export default () => {
+export const conn1test = () => {
   tarantool.call(conn1, "api_car_add", [datagen.getData()]);
+};
+
+export const conn2test = () => {
   tarantool.call(conn2, "api_car_add", [datagen.getData()]);
 };
 
