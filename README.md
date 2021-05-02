@@ -76,7 +76,7 @@ CGO_ENABLED=1 go run ./cmd/xk6/main.go build master \
 9. Запустите тестирование:
 
 ```bash
-./k6 run --out influxdb=http://localhost:8086/k6  ../xk6-tarantool-example/scenarios/test.js
+./k6 run --out influxdb=http://localhost:8086/k6  ../xk6-tarantool-example/scenarios/test_scenarios_extended.js
 
           /\      |‾‾| /‾‾/   /‾‾/   
      /\  /  \     |  |/  /   /  /    
@@ -85,30 +85,36 @@ CGO_ENABLED=1 go run ./cmd/xk6/main.go build master \
   / __________ \  |__| \__\ \_____/ .io
 
   execution: local
-     script: ../xk6-tarantool-example/scenarios/test.js
+     script: ../xk6-tarantool-example/scenarios/test_scenarios_extended.js
      output: InfluxDBv1 (http://localhost:8086)
 
-  scenarios: (100.00%) 1 scenario, 100 max VUs, 5m30s max duration (incl. graceful stop):
-           * constant_request_rate: 10000.00 iterations/s for 5m0s (maxVUs: 100, gracefulStop: 30s)
+  scenarios: (100.00%) 2 scenarios, 200 max VUs, 40s max duration (incl. graceful stop):
+           * conn1test: 10000.00 iterations/s for 10s (maxVUs: 100, exec: conn1test, gracefulStop: 30s)
+           * conn2test: 10000.00 iterations/s for 10s (maxVUs: 100, exec: conn2test, gracefulStop: 30s)
 
 INFO[0000] Run data generation in the background         source=console
-WARN[0000] Insufficient VUs, reached 100 active VUs and cannot initialize more  executor=constant-arrival-rate scenario=constant_request_rate
-INFO[0300] Testing complete                              source=console
+WARN[0000] Insufficient VUs, reached 100 active VUs and cannot initialize more  executor=constant-arrival-rate scenario=conn1test
+WARN[0000] Insufficient VUs, reached 100 active VUs and cannot initialize more  executor=constant-arrival-rate scenario=conn2test
+INFO[0010] Testing complete                              source=console
 
-running (5m00.0s), 000/100 VUs, 1186387 complete and 0 interrupted iterations
-constant_request_rate ✓ [======================================] 100/100 VUs  5m0s  10000 iters/s
+running (10.0s), 000/200 VUs, 96483 complete and 0 interrupted iterations
+conn1test ✓ [======================================] 100/100 VUs  10s  10000 iters/s
+conn2test ✓ [======================================] 100/100 VUs  10s  10000 iters/s
+
+     ✓ is status OK
 
      █ setup
 
      █ teardown
 
+   ✓ checks...............: 100.00% ✓ 96483 ✗ 0    
      data_received........: 0 B     0 B/s
      data_sent............: 0 B     0 B/s
-     dropped_iterations...: 1813613 6044.615005/s
-     iteration_duration...: avg=24.62ms min=85.26µs med=21.05ms max=261.08ms p(90)=38.32ms p(95)=48.29ms
-     iterations...........: 1186387 3954.125087/s
-     vus..................: 100     min=100 max=100
-     vus_max..............: 100     min=100 max=100
+     dropped_iterations...: 103517  10318.42/s
+   ✓ iteration_duration...: avg=19.48ms min=66.97µs med=16.02ms max=207.6ms p(90)=33ms p(95)=44.53ms
+     iterations...........: 96483   9617.281382/s
+     vus..................: 200     min=200 max=200
+     vus_max..............: 200     min=200 max=200
 
 ```
 
